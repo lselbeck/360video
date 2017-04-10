@@ -52,10 +52,10 @@
 		var hotspots = {
 			railroad: {
 				pitch: 320, //in degrees. Up is positive.
-			  yaw: 285, //in degrees. To the right is positive.
-			  radius: 1, //radius of the circular target in meters.
-			  distance: 30, //distance of target from camera in meters.
-			  message: "I'm a railroad!" //popup when clicked
+				yaw: 285, //in degrees. To the right is positive.
+				radius: 1, //radius of the circular target in meters.
+				distance: 30, //distance of target from camera in meters.
+				message: "I'm a railroad!" //popup when clicked
 			},
 			peak: {
 				pitch: 15,
@@ -119,7 +119,7 @@
 
 		//watch for errors
 		function onVRViewError(e) {
-		  console.log('Error: ' + e.message);
+			console.log('Error: ' + e.message);
 		}
 
 		window.addEventListener('load', onVrViewLoad);
