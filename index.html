@@ -1,0 +1,128 @@
+<!--
+// Author: Luke Selbeck
+// Date: 4/10/2017
+// Description:
+// This is an exercise in 360 video.  It has an equirectangular mp4 file,
+// and uses Google's VR View API (https://developers.google.com/vr/concepts/vrview-web)
+// to present it.
+//
+// Hotspots are clickable and positioned at a fixed point within the 360 view
+//
+// NOTES:
+// What went well:
+// Google's VR View API is really easy to use, and pretty straightforward with a great
+// getting started page.  You just need to input the right configuration, and you're all set!
+// 
+// What was challenging:
+// Researching which vr library to use took a while.  I researched three.js
+// (https://github.com/mrdoob/three.js) and WebVR (https://webvr.info/) before concluding
+// that VrView would be the least amount of work for me.  That being said, VrView's
+// documentation is not the best, so figuring out the methods and parameters to use took
+// a little time
+//
+// Cool aplications:
+// -Hotspots can be used to load different pictures, so you could 'travel' through an environment
+// -Virtual 360 tours of houses or apartments for sale, so you don't have to go there in person
+// -Training simulators, like flight training, being able to look around the cockpit without
+//  having to make an actual mock cockpit
+// -More immersive pictures - post a 360 pic/vid to social media or send it through a messaging app
+// -On a phone, you could move the phone to change the view angle, aka vr
+// -Touring a museum, hotspots can be used to read descriptions of exhibits
+//
+// All in all, a fun little project!
+// 
+-->
+
+<html>
+<head>
+	<title>Luke's 360 Video!</title>
+	<script src="http://storage.googleapis.com/vrview/2.0/build/vrview.min.js"></script>
+	<style>
+		body { margin: 0; }
+		iframe { width: 100%;	height: 100%;	}
+	</style>
+</head>
+<body>
+	<div id="vrview"></div>
+
+	<script type="text/javascript">
+
+		//**CONFIGURATION**//
+		var video = "http://vr.jwplayer.com/content/AgqYcfAT/AgqYcfAT-8yQ1cYbs.mp4"; //any equirectangular mp4 file
+		var hotspots = {
+			railroad: {
+				pitch: 320, //in degrees. Up is positive.
+			  yaw: 285, //in degrees. To the right is positive.
+			  radius: 1, //radius of the circular target in meters.
+			  distance: 30, //distance of target from camera in meters.
+			  message: "I'm a railroad!" //popup when clicked
+			},
+			peak: {
+				pitch: 15,
+				yaw: 10,
+				radius: 1,
+				distance: 30,
+				message: "I'm a mountain peak!"
+			},
+			fence: {
+				pitch: 355,
+				yaw: 175,
+				radius: 1,
+				distance: 30,
+				message: "I'm a fence post!"
+			},
+			highPeak: {
+				pitch: 45,
+				yaw: 60,
+				radius: 1,
+				distance: 30,
+				message: "I'm the highest peak!"
+			}
+		}
+
+
+		//**IMPLEMENTATION**//
+		var vrView;
+
+		//load vrView once window loads
+		function onVrViewLoad() {
+			vrView = new VRView.Player('#vrview', {
+				video: video,
+				is_stereo: false
+			});
+
+			vrView.on('ready', onVRViewReady);
+			vrView.on('click', onHotspotClick);
+		}
+
+		//load hotspots into vrView
+		function onVRViewReady(e) {
+			for (var i in hotspots) {
+				if (!hotspots.hasOwnProperty(i)) continue;
+
+				vrView.addHotspot(i, {
+					pitch: hotspots[i].pitch,
+					yaw: hotspots[i].yaw,
+					radius: hotspots[i].radius,
+					distance: hotspots[i].distance
+				});
+			}
+		}
+
+		//handle when a hotspot gets clicked
+		function onHotspotClick(e) {
+			console.log('onHotspotClick', e.id);
+			if (e.id) {
+				alert(hotspots[e.id].message);
+			}
+		}
+
+		//watch for errors
+		function onVRViewError(e) {
+		  console.log('Error: ' + e.message);
+		}
+
+		window.addEventListener('load', onVrViewLoad);
+	</script>
+</body>
+</html
